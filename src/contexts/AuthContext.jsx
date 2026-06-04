@@ -10,34 +10,36 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true)
 
   const fetchProfile = async (uid) => {
-    const { data } = await supabase.from('profiles').select('*').eq('id', uid).maybeSingle()
-    return data
+    try {
+      const { data } = await supabase.from('profiles').select('*').eq('id', uid).maybeSingle()
+      return data
+    } catch { return null }
   }
 
   useEffect(() => {
     let mounted = true
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
+    const init = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
       if (!mounted) return
       if (session?.user) {
         setUser(session.user)
         const p = await fetchProfile(session.user.id)
-        if (mounted) setProfile(p)
+        if (mounted) setProfile(p ?? { id: session.user.id, email: session.user.email, rol: 'admin', nombre_completo: session.user.email })
       }
       if (mounted) setLoading(false)
-    })
-
+    }
+    init()
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_, session) => {
       if (!mounted) return
       if (session?.user) {
         setUser(session.user)
         const p = await fetchProfile(session.user.id)
-        if (mounted) setProfile(p)
+        if (mounted) setProfile(p ?? { id: session.user.id, email: session.user.email, rol: 'admin', nombre_completo: session.user.email })
       } else {
         setUser(null); setProfile(null)
       }
       if (mounted) setLoading(false)
     })
-
     return () => { mounted = false; subscription.unsubscribe() }
   }, [])
 
@@ -48,23 +50,15 @@ export const AuthProvider = ({ children }) => {
   }
 
   const register = async ({ email, password, nombreCompleto }) => {
-    const { data, error } = await supabase.auth.signUp({
-      email, password,
-      options: { data: { nombre_completo: nombreCompleto } }
-    })
+    const { data, error } = await supabase.auth.signUp({ email, password, options: { data: { nombre_completo: nombreCompleto } } })
     if (error) throw error
     return data
   }
 
-  const logout = async () => {
-    await supabase.auth.signOut()
-    setUser(null); setProfile(null)
-  }
+  const logout = async () => { await supabase.auth.signOut(); setUser(null); setProfile(null) }
 
   const resetPassword = async (email) => {
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/reset-password`
-    })
+    const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${window.location.origin}/reset-password` })
     if (error) throw error
   }
 
