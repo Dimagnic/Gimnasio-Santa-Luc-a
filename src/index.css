@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;0,900;1,900&family=Barlow:wght@400;500;600;700;800&family=Rajdhani:wght@500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --sl-blue: #1A5CE5;
+  --sl-blue-dark: #1248C0;
+  --sl-blue-deep: #0D3A99;
+  --sl-blue-glow: rgba(26, 92, 229, 0.4);
+  --sl-white: #FFFFFF;
+  --sl-silver: #C8D6E8;
+  --sl-black: #0A0A0F;
+  --sl-dark: #0F1420;
+  --sl-card: #131825;
+  --sl-border: rgba(26, 92, 229, 0.2);
+}
+
+@layer base {
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--sl-black);
+    color: #fff;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,h2,h3,h4,h5,h6 { font-family: 'Barlow Condensed', sans-serif; }
+}
+
+/* ── Swiper overrides ── */
+.swiper-pagination-bullet { background: rgba(255,255,255,0.4) !important; }
+.swiper-pagination-bullet-active { background: var(--sl-blue) !important; opacity: 1; }
+.swiper-button-next, .swiper-button-prev { color: var(--sl-blue) !important; }
+
+/* ── Animations ── */
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px var(--sl-blue-glow); }
+  50% { box-shadow: 0 0 40px var(--sl-blue-glow), 0 0 80px rgba(26,92,229,0.2); }
+}
+@keyframes scan-line {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.animate-float { animation: float 4s ease-in-out infinite; }
+.animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+.animate-fade-up { animation: fadeInUp 0.7s ease forwards; }
+.animate-slide-right { animation: slide-in-right 0.6s ease forwards; }
+
+/* ── Blue shimmer text ── */
+.text-shimmer {
+  background: linear-gradient(90deg, #fff 0%, var(--sl-blue) 40%, #fff 60%, var(--sl-blue) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 4s linear infinite;
+}
+
+/* ── Glass card ── */
+.glass-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--sl-border);
+  backdrop-filter: blur(12px);
+}
+
+/* ── Blue gradient line ── */
+.sl-divider {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--sl-blue), transparent);
+}
+
+/* ── Hero background ── */
+.hero-grid {
+  background-image:
+    linear-gradient(rgba(26,92,229,0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(26,92,229,0.08) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* ── Section transitions ── */
+.section-dark { background: var(--sl-black); }
+.section-darker { background: var(--sl-dark); }
+.section-card { background: var(--sl-card); }
+
+@layer utilities {
+  .text-shadow { text-shadow: 0 2px 12px rgba(0,0,0,0.6); }
+  .blue-glow { text-shadow: 0 0 30px rgba(26,92,229,0.8); }
+  .btn-primary {
+    @apply bg-[var(--sl-blue)] text-white font-black uppercase tracking-widest px-8 py-4 transition-all hover:bg-[var(--sl-blue-dark)] hover:scale-105 active:scale-95;
+    box-shadow: 0 4px 20px rgba(26,92,229,0.4);
+  }
+  .btn-outline {
+    @apply border-2 border-[var(--sl-blue)] text-white font-black uppercase tracking-widest px-8 py-4 transition-all hover:bg-[var(--sl-blue)] hover:scale-105 active:scale-95;
+  }
+}
