@@ -1,20 +1,21 @@
 import React from 'react'
 import LeadForm from './LeadForm'
 import { MapPin, Phone, Instagram, Facebook } from 'lucide-react'
+import { useCmsContent } from '@/hooks/useCmsContent'
 
 export default function ContactSection() {
+  const { content } = useCmsContent()
+  const gym = content?.gym || {}
+
   return (
     <section id="contacto" className="py-24 relative overflow-hidden" style={{ background: '#0A0A0F' }}>
-      {/* Background grid */}
       <div className="absolute inset-0 hero-grid opacity-30 pointer-events-none" />
-      {/* Blue glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full pointer-events-none"
         style={{ background: 'radial-gradient(circle, rgba(26,92,229,0.08) 0%, transparent 70%)' }} />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 items-start">
 
-          {/* Left: Info */}
           <div>
             <div className="flex items-center gap-3 mb-6">
               <span className="h-px w-12 inline-block" style={{ background: '#1A5CE5' }} />
@@ -28,7 +29,6 @@ export default function ContactSection() {
               Déjanos tus datos y un asesor te contactará en menos de 24 horas. ¡Tu transformación comienza hoy!
             </p>
 
-            {/* Contact info */}
             <div className="space-y-5">
               <div className="flex items-center gap-4 p-4 rounded-xl"
                 style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(26,92,229,0.15)' }}>
@@ -38,7 +38,7 @@ export default function ContactSection() {
                 </div>
                 <div>
                   <p className="text-white font-semibold text-sm">Ubicación</p>
-                  <p className="text-sm" style={{ color: 'rgba(200,214,232,0.5)' }}>Puebla, México</p>
+                  <p className="text-sm" style={{ color: 'rgba(200,214,232,0.5)' }}>{gym.address || 'Puebla, México'}</p>
                 </div>
               </div>
               <div className="flex items-center gap-4 p-4 rounded-xl"
@@ -49,12 +49,24 @@ export default function ContactSection() {
                 </div>
                 <div>
                   <p className="text-white font-semibold text-sm">Teléfono</p>
-                  <p className="text-sm" style={{ color: 'rgba(200,214,232,0.5)' }}>+52 222 000 0000</p>
+                  <p className="text-sm" style={{ color: 'rgba(200,214,232,0.5)' }}>{gym.phone || '+52 222 000 0000'}</p>
                 </div>
               </div>
+              {gym.hours && (
+                <div className="flex items-center gap-4 p-4 rounded-xl"
+                  style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(26,92,229,0.15)' }}>
+                  <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
+                    style={{ background: 'rgba(26,92,229,0.15)' }}>
+                    <span className="text-sm" style={{ color: '#1A5CE5' }}>🕐</span>
+                  </div>
+                  <div>
+                    <p className="text-white font-semibold text-sm">Horarios</p>
+                    <p className="text-sm" style={{ color: 'rgba(200,214,232,0.5)' }}>{gym.hours}</p>
+                  </div>
+                </div>
+              )}
             </div>
 
-            {/* Social */}
             <div className="flex gap-3 mt-8">
               <a href="#" className="w-10 h-10 rounded-lg flex items-center justify-center transition-all hover:scale-110"
                 style={{ background: 'rgba(26,92,229,0.15)', border: '1px solid rgba(26,92,229,0.3)' }}>
@@ -67,7 +79,6 @@ export default function ContactSection() {
             </div>
           </div>
 
-          {/* Right: Form */}
           <div className="rounded-2xl p-7 md:p-8"
             style={{ background: '#131825', border: '1px solid rgba(26,92,229,0.2)', boxShadow: '0 8px 40px rgba(26,92,229,0.1)' }}>
             <h3 className="font-black text-white text-2xl uppercase mb-6" style={{ fontFamily: 'Barlow Condensed' }}>
